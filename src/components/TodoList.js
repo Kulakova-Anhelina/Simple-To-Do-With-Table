@@ -5,6 +5,7 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import Tooltip from "@material-ui/core/Tooltip";
+import TextField from '@material-ui/core/TextField';
 
 const Todolist = () => {
   const [todo, setTodo] = useState({ desc: "", date: "" });
@@ -52,16 +53,14 @@ const Todolist = () => {
 
   return (
     <div>
-      <form>
-        <label>Data: </label>
-        <input
-          type="date"
+        <TextField label = "Data:"
+        style = {{marginRight: 10}}
           name="date"
           value={todo.date}
           onChange={inputChanged}
         />
-        <label>Description: </label>
-        <input
+        <TextField label = "Description:" 
+         style = {{marginRight: 10}}
           type="text"
           name="desc"
           value={todo.desc}
@@ -73,7 +72,6 @@ const Todolist = () => {
             <AddCircleIcon fontSize="large" />
           </IconButton>
         </Tooltip>
-      </form>
       <ReactTable filterable={true} data={todos} columns={columns} />
     </div>
   );

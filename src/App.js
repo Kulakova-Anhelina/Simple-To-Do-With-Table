@@ -10,7 +10,7 @@ function App() {
     <div className="App">
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6">Todo List</Typography>
+          <Typography variant="h6" className = "App-header">My to do list </Typography>
         </Toolbar>
       </AppBar>
       <TodoList />
