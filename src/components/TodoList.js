@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const Todolist = () => {
   const [todo, setTodo] = useState({ desc: "", date: "" });
@@ -16,9 +20,9 @@ const Todolist = () => {
     setTodo({ ...todo, [event.target.name]: event.target.value });
   };
 
-  const handleDelete = (event) => {
+  const handleDelete = event => {
     event.preventDefault();
-    setTodos(todos.filter((todo, index) => index !== parseInt(event.target.id)));
+    setTodos(todos.filter((_, index) => index !== parseInt(event.target.id)));
   };
 
   const columns = [
@@ -31,7 +35,16 @@ const Todolist = () => {
       accessor: "desc"
     },
     {
-      Cell: ({index}) => <button id = {index} onClick = {handleDelete}>Delete</button>,
+      Cell: ({ index }) => (
+        <Button
+          color="secondary"
+          size="small"
+          id={index}
+          onClick={handleDelete}
+        >
+          Delete
+        </Button>
+      ),
       filterable: false,
       sortable: false
     }
@@ -40,7 +53,7 @@ const Todolist = () => {
   return (
     <div>
       <form>
-      <label>Data: </label>
+        <label>Data: </label>
         <input
           type="date"
           name="date"
@@ -55,10 +68,13 @@ const Todolist = () => {
           onChange={inputChanged}
           placeholder="description"
         />
-       
-        <button onClick={addTodo}>Add</button>
+        <Tooltip title="Add to do things">
+          <IconButton color="primary" onClick={addTodo}>
+            <AddCircleIcon fontSize="large" />
+          </IconButton>
+        </Tooltip>
       </form>
-      <ReactTable filterable = {true} data={todos} columns={columns}  />
+      <ReactTable filterable={true} data={todos} columns={columns} />
     </div>
   );
 };
