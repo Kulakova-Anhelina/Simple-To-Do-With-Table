@@ -5,20 +5,31 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import Tooltip from "@material-ui/core/Tooltip";
-import TextField from '@material-ui/core/TextField';
+import TextField from "@material-ui/core/TextField";
+import Grid from "@material-ui/core/Grid";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker
+} from "@material-ui/pickers";
 
 const Todolist = () => {
-  const [todo, setTodo] = useState({ desc: "", date: "" });
+  const currentDate = new Date() ;
+  const [todo, setTodo] = useState({ desc: "", date: currentDate });
   const [todos, setTodos] = useState([]);
 
   const addTodo = event => {
     event.preventDefault();
-    setTodos([{ desc: todo.desc, date: todo.date }, ...todos]);
-    setTodo({ desc: "", date: "" });
+    setTodos([{ desc: todo.desc, date: todo.date.toLocaleDateString()}, ...todos]);
+    setTodo({ desc: "", date: currentDate });
   };
 
   const inputChanged = event => {
     setTodo({ ...todo, [event.target.name]: event.target.value });
+  };
+
+  const handleDateChange = date => {
+    setTodo({...todo, date: date});
   };
 
   const handleDelete = event => {
@@ -53,25 +64,35 @@ const Todolist = () => {
 
   return (
     <div>
-        <TextField label = "Data:"
-        style = {{marginRight: 10}}
-          name="date"
-          value={todo.date}
-          onChange={inputChanged}
-        />
-        <TextField label = "Description:" 
-         style = {{marginRight: 10}}
-          type="text"
-          name="desc"
-          value={todo.desc}
-          onChange={inputChanged}
-          placeholder="description"
-        />
-        <Tooltip title="Add to do things">
-          <IconButton color="primary" onClick={addTodo}>
-            <AddCircleIcon fontSize="large" />
-          </IconButton>
-        </Tooltip>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <Grid container justify="space-around">
+          <KeyboardDatePicker
+            variant="inline"
+            format="MM/dd/yyyy"
+            margin="normal"
+            id="date-picker-inline"
+            label="Date"
+            style={{ marginRight: 10 }}
+            value={todo.date}
+            onChange={handleDateChange}
+          />
+        </Grid>
+      </MuiPickersUtilsProvider>
+      <TextField
+        label="Description:"
+        style={{ marginRight: 10 }}
+        type="text"
+        name="desc"
+        value={todo.desc}
+        onChange={inputChanged}
+        placeholder="description"
+      />
+
+      <Tooltip title="Add to do things">
+        <IconButton color="primary" onClick={addTodo}>
+          <AddCircleIcon fontSize="large" />
+        </IconButton>
+      </Tooltip>
       <ReactTable filterable={true} data={todos} columns={columns} />
     </div>
   );
